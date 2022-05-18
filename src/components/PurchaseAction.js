@@ -7,14 +7,14 @@ const { Option } = Select;
 export default function PurchaseAction() {
   const itemQtyRange = [];
   const itemQty = 2;
-  console.log('inside Purchase Action');
+  // console.log('inside Purchase Action');
   // eslint-disable-next-line no-plusplus
   for (let i = 1; i < itemQty + 1; i++) {
     itemQtyRange.push(<Option key={i}>{i}</Option>);
   }
 
-  console.log('@@@@@@@@@', itemQtyRange);
-  console.log('#########');
+  // console.log('@@@@@@@@@', itemQtyRange);
+  // console.log('#########');
   return (
     <div>
       This is the purchase tablsfsfe

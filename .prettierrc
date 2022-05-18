@@ -2,5 +2,6 @@
   "singleQuote": true,
   "endOfLine": "auto",
   "parser": "flow",
-  "trailingComma": "all"
+  "trailingComma": "all",
+  "printWidth": 80
 }
