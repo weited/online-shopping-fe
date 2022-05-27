@@ -1,37 +1,22 @@
 /* eslint-disable prefer-regex-literals */
 import React, { useState } from 'react';
-// import CardForm from './CardForm';
-import { Form, Input, Button, InputNumber } from 'antd';
+import { Form, Input, Button, InputNumber, Alert } from 'antd';
 import { addBalance } from '../services/UserApi';
-// const { Option } = Select;
 
 export default function CardTopup(props) {
-  // const itemQtyRange = [];
-  // const itemQty = 2;
-  // console.log('inside Purchase Action');
-  // // eslint-disable-next-line no-plusplus
-  // for (let i = 1; i < itemQty + 1; i++) {
-  //   itemQtyRange.push(<Option key={i}>{i}</Option>);
-  // }
   // eslint-disable-next-line react/prop-types
   const { updateHomeBalance } = props;
-  // console.log('propssss', updateHomeBalance);
   const [balance, setBalance] = useState(null);
+  const [errorMsg, setErrorMsg] = useState(null);
   const onFinish = async (formData) => {
-    // console.log('Success:', formData);
-
     try {
       const { data } = await addBalance(1, formData);
       setBalance(data.newBalance);
       updateHomeBalance();
-      console.log('Topup  balance, ', balance);
     } catch (error) {
-      console.log(error);
+      setErrorMsg(error.response.data.error);
+      setTimeout(() => setErrorMsg(null), 3000);
     }
-  };
-
-  const onFinishFailed = (errorInfo) => {
-    console.log('Failed:', errorInfo);
   };
   return (
     <>
@@ -47,12 +32,11 @@ export default function CardTopup(props) {
           remember: true,
         }}
         onFinish={onFinish}
-        onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item
           label="Card Number"
-          name="cardNumber"
+          name="cardNum"
           rules={[
             {
               required: true,
@@ -66,7 +50,7 @@ export default function CardTopup(props) {
 
         <Form.Item
           label="Password"
-          name="password"
+          name="cardPin"
           rules={[
             {
               required: true,
@@ -105,6 +89,7 @@ export default function CardTopup(props) {
           </Button>
         </Form.Item>
       </Form>
+      {errorMsg && <Alert message={errorMsg} type="error" />}
       <h2>Your new balance is: {balance}</h2>
     </>
   );

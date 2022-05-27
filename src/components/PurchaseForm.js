@@ -2,7 +2,7 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import { Modal, Form, Input, Typography, InputNumber, Alert } from 'antd';
-// import { SmileOutlined, UserOutlined } from '@ant-design/icons';
+
 const { Text } = Typography;
 
 export default function PurchaseForm({
@@ -18,14 +18,6 @@ export default function PurchaseForm({
 
   const [form] = Form.useForm();
   const totalPrice = Form.useWatch('quantity', form) * price_of_unit;
-  // const onFinish = (values) => {
-  //   // totalPrice = values?.quantity;
-  //   console.log('onValuesChange:', totalPrice);
-  // };
-
-  // const onFinishFailed = (errorInfo) => {
-  //   console.log('Failed:', errorInfo);
-  // };
 
   return (
     <Modal
@@ -40,6 +32,7 @@ export default function PurchaseForm({
             onOk(values);
           })
           .catch((info) => {
+            // eslint-disable-next-line no-console
             console.log('Validate Failed:', info);
           });
       }}
@@ -61,8 +54,6 @@ export default function PurchaseForm({
         initialValues={{
           remember: true,
         }}
-        // onValuesChange={onFinish}
-        // onFinishFailed={onFinishFailed}
         autoComplete="off"
       >
         <Form.Item label="ID" name="itemId">
@@ -120,17 +111,6 @@ export default function PurchaseForm({
         >
           <Input.Password />
         </Form.Item>
-
-        {/* <Form.Item
-          wrapperCol={{
-            offset: 8,
-            span: 16,
-          }}
-        >
-          <Button type="primary" htmlType="submit">
-            Submit
-          </Button>
-        </Form.Item> */}
       </Form>
       {totalPrice > userBal && (
         <Alert message="not sufficient funds" type="error" />

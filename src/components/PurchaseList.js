@@ -1,24 +1,12 @@
 import React, { useState, useEffect } from 'react';
-// import axios from '../services/api';
 import { Button, Table, Input, Modal, Alert } from 'antd';
-// import { getAllItems } from '../services/ItemApi';
-// import PurchaseForm from './PurchaseForm';
 import { getAllPurchases, deletePurchaseById } from '../services/PurchaseApi';
 
 const { Search } = Input;
 
 export default function PurchaseList() {
-  console.log('rendered Purchase List');
-  // const productData = {};
   const [refresh, setRefresh] = useState(false);
-  const [orderData, setOrderData] = useState([
-    // {
-    //   item_id: ' ',
-    //   item_name: ' ',
-    //   stock_qty: null,
-    //   price_of_unit: null,
-    // },
-  ]);
+  const [orderData, setOrderData] = useState([]);
   const [search, setSearh] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -33,8 +21,6 @@ export default function PurchaseList() {
       }
     };
     fetchPurchases();
-    // if (refresh) setRefresh(false);
-    console.log('refresed!!!!!!!!');
   }, [search, refresh]);
 
   // MODAL
@@ -44,21 +30,17 @@ export default function PurchaseList() {
 
   const handleOk = async () => {
     setConfirmLoading(true);
-    console.log('The selecetd delete id is: ', deleteId);
     try {
-      const result = await deletePurchaseById(deleteId);
-      console.log('######## purchase result', result);
+      await deletePurchaseById(deleteId);
       setVisible(false);
       setConfirmLoading(false);
       setRefresh(!refresh);
     } catch (error) {
-      console.log(error);
       setConfirmLoading(false);
     }
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button');
     setVisible(false);
     setConfirmLoading(false);
   };
@@ -66,11 +48,9 @@ export default function PurchaseList() {
   const handleDeleteBtn = async (purId) => {
     setDeleteId(purId);
     setVisible(true);
-    console.log('clicked cancle', purId);
   };
 
   const onSearchUserId = (userId) => {
-    console.log('value##########', typeof userId);
     if (userId === '') {
       setSearh('');
       return;

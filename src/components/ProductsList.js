@@ -7,23 +7,13 @@ import { createPurchase } from '../services/PurchaseApi';
 
 const { Search } = Input;
 
-export default function ProductsList({ userBal }) {
-  console.log('rendered Product List');
-  // const productData = {};
+export default function ProductsList({ userBal, updateHomeBalance }) {
   const [refresh, setRefresh] = useState(false);
-  const [itemData, setItemData] = useState([
-    // {
-    //   item_id: ' ',
-    //   item_name: ' ',
-    //   stock_qty: null,
-    //   price_of_unit: null,
-    // },
-  ]);
+  const [itemData, setItemData] = useState([]);
   const [search, setSearh] = useState('');
   const [errorMsg, setErrorMsg] = useState('');
 
   useEffect(() => {
-    console.log('fetch all####################################');
     const fetchItems = async () => {
       const result = await getAllItems(search);
       setItemData(result.data.items);
@@ -34,7 +24,6 @@ export default function ProductsList({ userBal }) {
   // MODAL
   const [visible, setVisible] = useState(false);
   const [confirmLoading, setConfirmLoading] = useState(false);
-  // const [modalText, setModalText] = useState('Content of the modal');
   const [modalItem, setModalItem] = useState({
     item_id: '',
     item_name: '',
@@ -43,23 +32,16 @@ export default function ProductsList({ userBal }) {
     seller_ip: '',
   });
 
-  // useEffect(() => {
-  //   if (refresh) setRefresh(false);
-  //   console.log('refresed!!!!!!!!');
-  //   console.log('modalItem is ', modalItem);
-  // }, [refresh]);
   const showModal = (item) => {
     setModalItem(item);
-    // setRefresh(true);
     setVisible(true);
-    // console.log('the selected item is', JSON.stringify(item));
   };
 
   const handleOk = async (values) => {
-    // setModalText('The modal will be closed after two seconds');
     const purchaseItem = {
       userId: 1,
       itemId: modalItem.item_id,
+      itemName: modalItem.item_name,
       sellerIp: modalItem.seller_ip,
       quantity: values.quantity,
       totalPrice: modalItem.price_of_unit * values.quantity,
@@ -67,16 +49,13 @@ export default function ProductsList({ userBal }) {
       cardPin: values.cardPin,
     };
     setConfirmLoading(true);
-    console.log('Received values of form: ', values);
-    console.log('the purchase item is', JSON.stringify(modalItem));
     try {
-      const result = await createPurchase(purchaseItem);
-      console.log('######## purchase result', result);
+      await createPurchase(purchaseItem);
       setRefresh(!refresh);
       setVisible(false);
       setConfirmLoading(false);
+      updateHomeBalance();
     } catch (error) {
-      console.log(error);
       setConfirmLoading(false);
       setErrorMsg(error.response.data.error);
       setTimeout(() => setErrorMsg(null), 4000);
@@ -84,8 +63,6 @@ export default function ProductsList({ userBal }) {
   };
 
   const handleCancel = () => {
-    console.log('Clicked cancel button', modalItem);
-
     setVisible(false);
     setConfirmLoading(false);
   };
@@ -115,7 +92,6 @@ export default function ProductsList({ userBal }) {
     {
       title: 'Action',
       key: 'action',
-      // render: (text, record) => <Button>BUY || {JSON.stringify(record)}</Button>,
       render: (text, record) => (
         <Button onClick={() => showModal(record)}>BUY</Button>
       ),
