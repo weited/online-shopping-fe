@@ -4,7 +4,7 @@ import { getAllPurchases, deletePurchaseById } from '../services/PurchaseApi';
 
 const { Search } = Input;
 
-export default function PurchaseList() {
+export default function PurchaseList({ updateUi }) {
   const [refresh, setRefresh] = useState(false);
   const [orderData, setOrderData] = useState([]);
   const [search, setSearh] = useState('');
@@ -21,7 +21,7 @@ export default function PurchaseList() {
       }
     };
     fetchPurchases();
-  }, [search, refresh]);
+  }, [search, refresh, updateUi]);
 
   // MODAL
   const [visible, setVisible] = useState(false);

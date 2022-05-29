@@ -50,7 +50,7 @@ function App() {
                   />
                 </TabPane>
                 <TabPane tab="Purchases" key="2">
-                  <PurchaseList />
+                  <PurchaseList updateUi={refresh} />
                 </TabPane>
                 <TabPane tab="Card" key="3">
                   <CardTopup updateHomeBalance={updateHomeBalance} />
